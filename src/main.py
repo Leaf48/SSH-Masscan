@@ -48,6 +48,12 @@ if "__main__" == __name__:
         default=False,
         help="error verbose (default is True)",
     )
+    parser.add_argument(
+        "--discord-webhook",
+        type=str,
+        default="",
+        help="discord webhook to send hit notification",
+    )
 
     args = parser.parse_args()
 
