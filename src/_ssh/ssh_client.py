@@ -12,7 +12,7 @@ while logger.hasHandlers():
 
 class SSH_Client:
     def __init__(self, host: str, port: str) -> None:
-        self.host, self.port = host, port
+        self.host, self.port = host, int(port)
 
         self.stop_event = threading.Event()
 
