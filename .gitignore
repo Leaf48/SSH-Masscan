@@ -6,6 +6,7 @@ result_*.txt
 
 # Config for masscan
 *.conf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
