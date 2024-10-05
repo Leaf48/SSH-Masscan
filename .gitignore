@@ -1,4 +1,11 @@
+# Text file
 result_*.txt
+*.txt
+!targets.txt
+!lists
+
+# Config for masscan
+*.conf
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
