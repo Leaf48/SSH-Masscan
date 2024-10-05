@@ -15,8 +15,13 @@ class Masscan:
             "--max-rate",
             maxrate,
         ]
-        result = subprocess.run(command, capture_output=True, text=True)
-        scan_result = json.loads(result.stdout)
-        print(scan_result)
 
-        return scan_result
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        try:
+            scan_result = json.loads(result.stdout)
+            print(scan_result)
+
+            return scan_result
+        except Exception as e:
+            return []

