@@ -24,6 +24,7 @@ class SSH_Client:
         if self.stop_event.is_set():
             return False
 
+        cli = None
         try:
             cli = paramiko.SSHClient()
             cli.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -46,9 +47,7 @@ class SSH_Client:
 
             self.stop_event.set()
 
-            cli.close()
             return True
-
         except paramiko.AuthenticationException:
             print(f"Authentication failed for: {username}:{password}")
             return False
@@ -72,24 +71,21 @@ class SSH_Client:
             else:
                 print(f"Unexpected error for {username}:{password}")
             return False
+        finally:
+            if cli:
+                cli.close()
 
     def dictionary_attack(
         self, is_combo_enabled: bool, is_user_pass_enabled: bool, worker_size: int
     ):
-        combo = []
         with open("./lists/combo.txt", "r") as f:
-            combo = f.readlines()
-            combo = [i.strip() for i in combo]
+            combo = [i.strip() for i in f.readlines()]
 
-        user = []
         with open("./lists/user.txt", "r") as f:
-            user = f.readlines()
-            user = [i.strip() for i in user]
+            user = [i.strip() for i in f.readlines()]
 
-        password = []
         with open("./lists/password.txt", "r") as f:
-            password = f.readlines()
-            password = [i.strip() for i in password]
+            password = [i.strip() for i in f.readlines()]
 
         if is_combo_enabled:
             print("Starting with combo")
