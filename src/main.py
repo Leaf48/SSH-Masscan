@@ -82,4 +82,4 @@ if "__main__" == __name__:
                     with open(f"result_{timestamp}.txt", "a") as file:
                         file.write(ssh_client.result + "\n")
 
-            print(f"Done: {target["ip"]}:{target["port"]}")
+            print(f"Done: {i}:{target["port"]}")
