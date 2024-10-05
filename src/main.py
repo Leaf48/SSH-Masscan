@@ -81,3 +81,5 @@ if "__main__" == __name__:
                 if ssh_client.result is not None:
                     with open(f"result_{timestamp}.txt", "a") as file:
                         file.write(ssh_client.result + "\n")
+
+            print(f"Done: {target["ip"]}:{target["port"]}")
