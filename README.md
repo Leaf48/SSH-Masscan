@@ -7,7 +7,8 @@ Scan SSH opened IPs and check their login
 ||=||   || \/ ||=||(( ((     (( ((||==||    (((  ||=|||\\|||\\|||==||_// 
 || ||   ||    || |\_)\_))   \_)\_)||  ||   \_)\\_|| ||| \||| \|||__|| \\
 
-usage: main.py [-h] [--targets TARGETS] [--max-rate MAX_RATE] [--disable-combo] [--disable-user-pass] [--worker-size WORKER_SIZE] [--output OUTPUT]
+usage: main.py [-h] [--targets TARGETS] [--max-rate MAX_RATE] [--disable-combo] [--disable-user-pass] [--worker-size WORKER_SIZE] [--disable-output]
+               [--error-verbose]
 
 A Mass SSH Scanner
 
@@ -19,7 +20,8 @@ options:
   --disable-user-pass   If user:pass from user.txt and password.txt will be used to dictionary attack
   --worker-size WORKER_SIZE
                         Worker size for dictionary attacking (default is 50)
-  --output OUTPUT       output (default is True)
+  --disable-output      output (default is True)
+  --error-verbose       error verbose (default is True)
 ```
 
 # Samples
