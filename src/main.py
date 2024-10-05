@@ -50,7 +50,6 @@ if "__main__" == __name__:
     )
 
     args = parser.parse_args()
-    print(args.disable_user_pass, args)
 
     timestamp = datetime.datetime.now().isoformat()
 
