@@ -31,3 +31,7 @@ main.py
 ```
 main.py --disable-user-pass --targets test.txt
 ```
+
+# Requirements
+- masscan
+- Python 3.12.1 (TESTED)
