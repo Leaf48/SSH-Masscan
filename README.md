@@ -7,8 +7,8 @@ Scan SSH opened IPs and check their login
 ||=||   || \/ ||=||(( ((     (( ((||==||    (((  ||=|||\\|||\\|||==||_// 
 || ||   ||    || |\_)\_))   \_)\_)||  ||   \_)\\_|| ||| \||| \|||__|| \\
 
-usage: main.py [-h] [--targets TARGETS] [--max-rate MAX_RATE] [--disable-combo] [--disable-user-pass] [--worker-size WORKER_SIZE] [--disable-output]
-               [--error-verbose]
+usage: main.py [-h] [--targets TARGETS] [--max-rate MAX_RATE] [--disable-combo] [--disable-user-pass] [--worker-size WORKER_SIZE]
+               [--disable-output] [--error-verbose] [--discord-webhook DISCORD_WEBHOOK]
 
 A Mass SSH Scanner
 
@@ -22,6 +22,8 @@ options:
                         Worker size for dictionary attacking (default is 50)
   --disable-output      output (default is True)
   --error-verbose       error verbose (default is True)
+  --discord-webhook DISCORD_WEBHOOK
+                        discord webhook to send hit notification
 ```
 
 # Samples
@@ -32,6 +34,10 @@ main.py
 ### Disable user/pass attacking and speicfy the path to target list
 ```
 main.py --disable-user-pass --targets test.txt
+```
+### Send discord notification via webhook on hit
+```
+main.py --discord-webhook "https://discord.com/api/webhooks/..."
 ```
 
 # Requirements
