@@ -11,8 +11,10 @@ while logger.hasHandlers():
 
 
 class SSH_Client:
-    def __init__(self, host: str, port: str) -> None:
+    def __init__(self, host: str, port: str, error_verbose: bool) -> None:
         self.host, self.port = host, int(port)
+
+        self.error_verbose = error_verbose
 
         self.stop_event = threading.Event()
 
@@ -50,7 +52,7 @@ class SSH_Client:
         except paramiko.AuthenticationException:
             print(f"Authentication failed for: {username}:{password}")
             return False
-        except paramiko.SSHException as e:
+        except paramiko.SSHException:
             print(f"SSH Error for {username}:{password}")
             if again:
                 self.login(username, password, False)
@@ -64,7 +66,11 @@ class SSH_Client:
         except Exception as e:
             if again:
                 self.login(username, password, False)
-            print(f"Unexpected error for {username}:{password}")
+
+            if self.error_verbose:
+                print(f"Unexpected error for {username}:{password}: {e}")
+            else:
+                print(f"Unexpected error for {username}:{password}")
             return False
 
     def dictionary_attack(

@@ -37,10 +37,16 @@ if "__main__" == __name__:
         help="Worker size for dictionary attacking (default is 50)",
     )
     parser.add_argument(
-        "--output",
-        type=bool,
+        "--disable-output",
+        action="store_false",
         default=True,
         help="output (default is True)",
+    )
+    parser.add_argument(
+        "--error-verbose",
+        action="store_true",
+        default=False,
+        help="error verbose (default is True)",
     )
 
     args = parser.parse_args()
@@ -64,14 +70,14 @@ if "__main__" == __name__:
             continue
 
         for i in ips:
-            ssh_client = SSH_Client(i["ip"], target["port"])
+            ssh_client = SSH_Client(i["ip"], target["port"], args.error_verbose)
             ssh_client.dictionary_attack(
                 is_combo_enabled=args.disable_combo,
                 is_user_pass_enabled=args.disable_user_pass,
                 worker_size=args.worker_size,
             )
 
-            if args.output:
+            if args.disable_output:
                 if ssh_client.result is not None:
                     with open(f"result_{timestamp}.txt", "a") as file:
                         file.write(ssh_client.result + "\n")
